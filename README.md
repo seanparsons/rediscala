@@ -9,8 +9,8 @@ http://code.google.com/p/redis/
 - On the command line run "sbt update console" to bootstrap into the Scala REPL with the scalaredis code available to you.
 - Get a connection and start experimenting:
 
-    import com.github.rediscala._
-    val connection = new RedisConnection()
-    connection.set("TEST", "cake")
-    connection.get("TEST")        
-    connection.get("TEST1")
+    scala> import com.github.rediscala._
+    scala> val connection = new RedisConnection()
+    scala> connection.set("TEST", "cake")
+    scala> connection.get("TEST")        
+    scala> connection.get("TEST1")
