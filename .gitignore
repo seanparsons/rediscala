@@ -1,2 +1,11 @@
 lib_managed
-
+project/plugins/src_managed
+project/plugins/lib_managed
+project/plugins/target
+project/plugins/project
+project/build/target/
+project/boot
+project/sbt_project_definition.iml
+rediscala.iml
+.idea
+target
