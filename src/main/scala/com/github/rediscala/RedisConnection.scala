@@ -104,7 +104,7 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
     }
   }
 
-  def executeIntReplyBooleanResponse(requestArguments: Seq[Any]) = {
+  def executeLongReplyBooleanResponse(requestArguments: Seq[Any]) = {
     handleFailure {
       executeLongResponse(requestArguments)
       readResponse[Long] match {

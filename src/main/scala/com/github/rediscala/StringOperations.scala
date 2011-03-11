@@ -20,9 +20,9 @@ trait StringOperations {
 
   def mget(keys: Seq[String]) = executeListResponse("MGET" +: keys)
 
-  def setbit(key: String, bit: Int, value: Boolean) = executeLongResponse(List("SETBIT", key, bit, if (value) 1 else 0))
+  def setbit(key: String, bit: Int, value: Boolean) = executeLongReplyBooleanResponse(List("SETBIT", key, bit, if (value) 1 else 0))
 
-  def getbit(key: String, bit: Long) = executeIntReplyBooleanResponse(List("GETBIT", key, bit))
+  def getbit(key: String, bit: Long) = executeLongReplyBooleanResponse(List("GETBIT", key, bit))
 
   def incr(key: String) = executeLongResponse(List("INCR", key))
 
