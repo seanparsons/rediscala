@@ -3,31 +3,31 @@ package com.github.rediscala
 trait KeyOperations {
   this: InternalRedisProvider =>
 
-  def del(keys: Seq[String]) = executeLongResponse("DEL" +: keys)
+  def del(keys: Seq[Any]) = executeLongResponse("DEL" +: keys)
 
-  def exists(key: String) = executeLongReplyBooleanResponse(List("EXISTS", key))
+  def exists(key: Any) = executeLongReplyBooleanResponse(List("EXISTS", key))
 
-  def expiry(key: String, seconds: Long) = executeLongReplyBooleanResponse(List("EXPIRE", key, seconds))
+  def expiry(key: Any, seconds: Long) = executeLongReplyBooleanResponse(List("EXPIRE", key, seconds))
 
-  def expireat(key: String, timestamp: Long) = executeLongReplyBooleanResponse(List("EXPIREAT", key, timestamp))
+  def expireat(key: Any, timestamp: Long) = executeLongReplyBooleanResponse(List("EXPIREAT", key, timestamp))
 
-  def keys(pattern: String) = executeListResponse(List("KEYS", pattern))
+  def keys(pattern: Any) = executeListResponse(List("KEYS", pattern))
 
-  def move(key: String, database: String) = executeLongReplyBooleanResponse(List("MOVE", key, database))
+  def move(key: Any, database: Any) = executeLongReplyBooleanResponse(List("MOVE", key, database))
 
-  def persist(key: String) = executeLongReplyBooleanResponse(List("PERSIST", key))
+  def persist(key: Any) = executeLongReplyBooleanResponse(List("PERSIST", key))
 
   def randomkey = executeStringResponse(List("RANDOMKEY"))
 
-  def rename(key: String, newKey: String) = executeStatusCodeResponse(List("RENAME", key, newKey))
+  def rename(key: Any, newKey: Any) = executeStatusCodeResponse(List("RENAME", key, newKey))
 
-  def renamenx(key: String, newKey: String) = executeLongReplyBooleanResponse(List("RENAMENX", key, newKey))
+  def renamenx(key: Any, newKey: Any) = executeLongReplyBooleanResponse(List("RENAMENX", key, newKey))
 
   /* TODO Come up with idiomatic implementation of SORT.
   def sort()
   */
 
-  def ttl(key: String) = executeLongResponse(List("TTL", key))
+  def ttl(key: Any) = executeLongResponse(List("TTL", key))
 
-  def typeOfKey(key: String) = executeStatusCodeResponse(List("TYPE", key))
+  def typeOfKey(key: Any) = executeStatusCodeResponse(List("TYPE", key))
 }

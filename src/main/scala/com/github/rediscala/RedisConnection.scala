@@ -10,7 +10,7 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
   def this() = this("localhost", 6379)
   protected val socket = new Socket(host, port)
   protected val outputStream = socket.getOutputStream()
-  protected val reader = new InputStreamReader(socket.getInputStream())
+  protected val reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
 
   @throws(classOf[IOException])
   def close(): Unit = {
@@ -20,24 +20,7 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
   }
 
   @inline
-  protected def readLine(): String = {
-    val stringBuilder = new StringBuilder()
-    var finished = false
-    while(!finished) {
-      println("finished = " + finished)
-      val char = reader.read().toChar
-      println("char = " + char.toInt)
-      if (char == RedisConnection.crChar) {
-        println("finished")
-        finished = true
-        println("finished = " + finished)
-        if (reader.read().toChar != RedisConnection.lfChar) throw new RuntimeException("Invalid character following CR.")
-      } else {
-        stringBuilder.append(char)
-      }
-    }
-    return stringBuilder.toString()
-  }
+  protected def readLine(): String = reader.readLine()
 
   protected def readList(resultNumber: Int): List[Option[String]] = {
     if (resultNumber == 0) List()
@@ -77,12 +60,13 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
       stringBuilder.append(RedisConnection.crlf)
     }
     val builtText = stringBuilder.toString()
-    println(builtText)
+    //println(builtText)
     outputStream.write(builtText.getBytes())
   }
 
   protected def readResponse[T]: Validation[String, T] = {
     val firstLine = readLine()
+    //println("firstLine = " + firstLine)
     return (firstLine.head match {
       case RedisConnection.singleLineReplyPrefix => Success(firstLine.tail)
       case RedisConnection.errorLineReplyPrefix => Failure(firstLine.tail)
@@ -127,8 +111,7 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
 
   def executeLongReplyBooleanResponse(requestArguments: Seq[Any]) = {
     handleFailure {
-      executeLongResponse(requestArguments)
-      readResponse[Long] match {
+      executeLongResponse(requestArguments) match {
         case Success(successValue) => {
           successValue match {
             case number: Long => Success(number == 1L)

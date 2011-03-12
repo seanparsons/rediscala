@@ -3,13 +3,13 @@ package com.github.rediscala
 trait SortedSetOperations {
   this: InternalRedisProvider =>
 
-  def zadd(key: String, score: Double, member: String) = executeLongResponse(List("ZADD", key, score, member))
+  def zadd(key: Any, score: Double, member: Any) = executeLongResponse(List("ZADD", key, score, member))
 
-  def zcard(key: String) = executeLongResponse(List("ZCARD", key))
+  def zcard(key: Any) = executeLongResponse(List("ZCARD", key))
 
-  def zcount(key: String, min: Double, max: Double) = executeLongResponse(List("ZCOUNT", key, min, max))
+  def zcount(key: Any, min: Double, max: Double) = executeLongResponse(List("ZCOUNT", key, min, max))
 
-  def zincrby(key: String, increment: Double, member: String) = executeListResponse(List("ZINCRBY", key, increment, member))
+  def zincrby(key: Any, increment: Double, member: Any) = executeListResponse(List("ZINCRBY", key, increment, member))
 
   /*
   TODO: Implement nice way of doing ZINTERSTORE.
@@ -32,21 +32,21 @@ trait SortedSetOperations {
   def zremrangebyscore()
   */
 
-  def zrange(key: String, start: Long, stop: Long, withScores: Boolean) = {
+  def zrange(key: Any, start: Long, stop: Long, withScores: Boolean) = {
     executeListResponse(List("ZRANGE", key, start, stop) :: {if (withScores) List("WITHSCORES") else Nil})
   }
 
-  def zrank(key: String, member: String) = executeOptionalLongResponse(List("ZRANK", key, member))
+  def zrank(key: Any, member: Any) = executeOptionalLongResponse(List("ZRANK", key, member))
 
-  def zrem(key: String, member: String) = (executeLongResponse(List("ZREM", key, member)) == 1)
+  def zrem(key: Any, member: Any) = (executeLongResponse(List("ZREM", key, member)) == 1)
 
-  def zremrangebyrank(key: String, start: Double, stop: Double) = executeLongResponse(List("ZREMRANGEBYRANK", key, start, stop))
+  def zremrangebyrank(key: Any, start: Double, stop: Double) = executeLongResponse(List("ZREMRANGEBYRANK", key, start, stop))
 
-  def zrevrange(key: String, start: Long, stop: Long, withScores: Boolean) = {
+  def zrevrange(key: Any, start: Long, stop: Long, withScores: Boolean) = {
     executeListResponse(List("ZREVRANGE", key, start, stop) :: {if (withScores) List("WITHSCORES") else Nil})
   }
 
-  def zrevrank(key: String, member: String) = executeOptionalLongResponse(List("ZREVRANK", key, member))
+  def zrevrank(key: Any, member: Any) = executeOptionalLongResponse(List("ZREVRANK", key, member))
 
-  def zscore(key: String, member: String) = executeStringResponse(List("ZSCORE", key, member))
+  def zscore(key: Any, member: Any) = executeStringResponse(List("ZSCORE", key, member))
 }
