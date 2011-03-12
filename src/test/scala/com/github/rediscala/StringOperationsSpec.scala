@@ -32,6 +32,15 @@ trait StringOperationsSpec {
     "provide setbit method" in {
       connection.setbit("TEST", 4, true) must equalTo(Success(false))
     }
+    "provider getbit method" in {
+      connection.getbit("TEST", 5) must equalTo(Success(false))
+    }
+    "result of getbit method should be the value set in that specific bit" in {
+      connection.setbit("TEST", 4, true)
+      connection.getbit("TEST", 5) must equalTo(Success(false))
+      connection.setbit("TEST", 5, true)
+      connection.getbit("TEST", 5) must equalTo(Success(true))
+    }
     "result of setbit method is the prior value held in that bit" in {
       connection.setbit("TEST", 4, true) must equalTo(Success(false))
       connection.setbit("TEST", 4, true) must equalTo(Success(true))
