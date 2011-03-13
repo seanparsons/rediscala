@@ -4,6 +4,7 @@ import java.io._
 import java.net.Socket
 import java.nio.CharBuffer
 import scalaz._
+import scalaz.Scalaz._
 
 case class RedisConnection(val host: String, val port: Int) extends RedisOperations
                                                             with Closeable {
@@ -42,7 +43,7 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
       reader.read(charBuffer)
       readLine()
       charBuffer.rewind()
-      Some(charBuffer.toString())
+      charBuffer.toString().some
     }
   }
 
@@ -68,12 +69,12 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
     val firstLine = readLine()
     //println("firstLine = " + firstLine)
     return (firstLine.head match {
-      case RedisConnection.singleLineReplyPrefix => Success(firstLine.tail)
-      case RedisConnection.errorLineReplyPrefix => Failure(firstLine.tail)
-      case RedisConnection.integerReplyPrefix => Success(firstLine.tail.toLong)
-      case RedisConnection.bulkReplyPrefix => Success(readString(firstLine.tail.toInt))
-      case RedisConnection.multiBulkReplyPrefix => Success(readList(firstLine.tail.toInt))
-      case _ => Failure("Unhandled response:" + firstLine)
+      case RedisConnection.singleLineReplyPrefix => firstLine.tail.success
+      case RedisConnection.errorLineReplyPrefix => firstLine.tail.fail
+      case RedisConnection.integerReplyPrefix => firstLine.tail.toLong.success
+      case RedisConnection.bulkReplyPrefix => readString(firstLine.tail.toInt).success
+      case RedisConnection.multiBulkReplyPrefix => readList(firstLine.tail.toInt).success
+      case _ => ("Unhandled response:" + firstLine).fail
     }).asInstanceOf[Validation[String, T]]
   }
 
@@ -82,22 +83,18 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
       call
     }
     catch {
-      case throwable: Throwable => Failure[String, T](throwable.getMessage())
+      case throwable: Throwable => throwable.getMessage().fail
     }
   }
 
   def executeOptionalLongResponse(requestArguments: Seq[Any]) = {
     handleFailure {
       sendRequest(requestArguments)
-      readResponse[Any] match {
-        case Success(successValue) => {
-          successValue match {
-            case number: Long => Success(Some(number))
-            case bulkReply: String => Success(None)
-            case _ => Failure("Unexpected return: " + successValue)
-          }
+      readResponse[Any].map{successValue =>
+        successValue match {
+          case number: Long => number.some
+          case bulkReply: String => None
         }
-        case failure => failure.asInstanceOf[Failure[String, Option[Long]]]
       }
     }
   }
@@ -111,15 +108,7 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
 
   def executeLongReplyBooleanResponse(requestArguments: Seq[Any]) = {
     handleFailure {
-      executeLongResponse(requestArguments) match {
-        case Success(successValue) => {
-          successValue match {
-            case number: Long => Success(number == 1L)
-            case _ => Failure("Unexpected response: " + successValue)
-          }
-        }
-        case failure => failure.asInstanceOf[Failure[String, Boolean]]
-      }
+      executeLongResponse(requestArguments).map(_ == 1L)
     }
   }
 
@@ -141,7 +130,7 @@ case class RedisConnection(val host: String, val port: Int) extends RedisOperati
     handleFailure {
       sendRequest(requestArguments)
       val line = readLine()
-      if (line.head == RedisConnection.singleLineReplyPrefix) Success(line.tail) else Failure("Invalid status code reply: " + line)
+      if (line.head == RedisConnection.singleLineReplyPrefix) line.tail.success else ("Invalid status code reply: " + line).fail
     }
   }
 }
