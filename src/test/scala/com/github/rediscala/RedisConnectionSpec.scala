@@ -4,12 +4,15 @@ import org.specs.mock.Mockito
 import org.specs.SpecificationWithJUnit
 import java.io.{InputStreamReader, BufferedReader}
 import java.net.Socket
+import scalaz._
+import scalaz.Scalaz._
 
 object RedisConnectionSpec extends SpecificationWithJUnit
                            with ConnectionSpec
                            with Mockito
                            with StringOperationsSpec
-                           with ServerOperationsSpec {
+                           with ServerOperationsSpec
+                           with KeyOperationsSpec {
   val host = "localhost"
   val port = 9786
   val redisAvailable = try {
@@ -33,6 +36,7 @@ object RedisConnectionSpec extends SpecificationWithJUnit
     connection.close()
     connection = null
   }
+
   var connection: RedisConnection = null
   "RedisConnection" should {
     if (!redisAvailable) {
@@ -45,6 +49,9 @@ object RedisConnectionSpec extends SpecificationWithJUnit
     }
     "must have server commands" in {
       serverOperations
+    }
+    "must have key commands" in {
+      keyOperations
     }
   }
 }

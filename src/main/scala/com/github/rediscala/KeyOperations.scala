@@ -5,29 +5,29 @@ trait KeyOperations {
 
   def del(keys: Seq[Any]) = executeLongResponse("DEL" +: keys)
 
-  def exists(key: Any) = executeLongReplyBooleanResponse(List("EXISTS", key))
+  def exists(key: Any) = executeLongReplyBooleanResponse(Vector("EXISTS", key))
 
-  def expiry(key: Any, seconds: Long) = executeLongReplyBooleanResponse(List("EXPIRE", key, seconds))
+  def expire(key: Any, seconds: Long) = executeLongReplyBooleanResponse(Vector("EXPIRE", key, seconds))
 
-  def expireat(key: Any, timestamp: Long) = executeLongReplyBooleanResponse(List("EXPIREAT", key, timestamp))
+  def expireat(key: Any, timestamp: Long) = executeLongReplyBooleanResponse(Vector("EXPIREAT", key, timestamp))
 
-  def keys(pattern: Any) = executeListResponse(List("KEYS", pattern))
+  def keys(pattern: Any) = executeListResponse(Vector("KEYS", pattern))
 
-  def move(key: Any, database: Any) = executeLongReplyBooleanResponse(List("MOVE", key, database))
+  def move(key: Any, database: Any) = executeLongReplyBooleanResponse(Vector("MOVE", key, database))
 
-  def persist(key: Any) = executeLongReplyBooleanResponse(List("PERSIST", key))
+  def persist(key: Any) = executeLongReplyBooleanResponse(Vector("PERSIST", key))
 
-  def randomkey = executeStringResponse(List("RANDOMKEY"))
+  def randomkey = executeStringResponse(Vector("RANDOMKEY"))
 
-  def rename(key: Any, newKey: Any) = executeStatusCodeResponse(List("RENAME", key, newKey))
+  def rename(key: Any, newKey: Any) = executeStatusCodeResponse(Vector("RENAME", key, newKey))
 
-  def renamenx(key: Any, newKey: Any) = executeLongReplyBooleanResponse(List("RENAMENX", key, newKey))
+  def renamenx(key: Any, newKey: Any) = executeLongReplyBooleanResponse(Vector("RENAMENX", key, newKey))
 
   /* TODO Come up with idiomatic implementation of SORT.
   def sort()
   */
 
-  def ttl(key: Any) = executeLongResponse(List("TTL", key))
+  def ttl(key: Any) = executeLongResponse(Vector("TTL", key))
 
-  def typeOfKey(key: Any) = executeStatusCodeResponse(List("TYPE", key))
+  def typeOfKey(key: Any) = executeStatusCodeResponse(Vector("TYPE", key))
 }
