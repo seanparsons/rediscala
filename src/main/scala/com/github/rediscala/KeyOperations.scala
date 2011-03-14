@@ -13,7 +13,7 @@ trait KeyOperations {
 
   def keys(pattern: Any) = executeListResponse(Vector("KEYS", pattern))
 
-  def move(key: Any, database: Any) = executeLongReplyBooleanResponse(Vector("MOVE", key, database))
+  def move(key: Any, database: Long) = executeLongReplyBooleanResponse(Vector("MOVE", key, database))
 
   def persist(key: Any) = executeLongReplyBooleanResponse(Vector("PERSIST", key))
 
@@ -27,7 +27,7 @@ trait KeyOperations {
   def sort()
   */
 
-  def ttl(key: Any) = executeLongResponse(Vector("TTL", key))
+  def ttl(key: Any) = executeLongResponse(Vector("TTL", key)).map(ttl => if (ttl == -1) None else Some(ttl))
 
   def typeOfKey(key: Any) = executeStatusCodeResponse(Vector("TYPE", key))
 }
