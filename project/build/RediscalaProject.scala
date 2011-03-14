@@ -1,6 +1,7 @@
 import sbt._
+import reaktor.scct.ScctProject
 
-class RediscalaProject(info: ProjectInfo) extends DefaultProject(info) with IdeaProject with AkkaProject {
+class RediscalaProject(info: ProjectInfo) extends DefaultProject(info) with IdeaProject with ScctProject {
   lazy val scalaToolsSnapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 
   lazy val scalazCore = "org.scalaz" %% "scalaz-core" % "6.0-SNAPSHOT"
