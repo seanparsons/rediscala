@@ -21,7 +21,7 @@ trait StringOperationsSpec {
       connection.decrby("TEST", 10L) must equalTo(Success(-10L))
     }
     "provide getrange method" in {
-      connection.getrange("TEST", 0, 10) must equalTo(Success(None))
+      connection.getrange("TEST", 0, 10) must equalTo(Success(Some("")))
     }
     "provide getset method" in {
       connection.getset("TEST", "cake") must equalTo(Success(None))

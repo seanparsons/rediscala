@@ -9,6 +9,7 @@ trait RedisOperations extends InternalRedisProvider
                     with SetOperations
                     with TransactionOperations
                     with ServerOperations
+                    with ConnectionOperations
 
 trait InternalRedisProvider {
   def executeLongResponse(requestArguments: Seq[Any]): Validation[String, Long]

@@ -61,10 +61,12 @@ trait KeyOperationsSpec {
         connection.set("TEST", "cake")
         connection.move("TSET", 1) must equalTo(Success(false))
       }
-      "moves the value to the specified key" in {
+      "moves the value to the specified database" in {
         connection.set("TEST", "cake")
         connection.move("TEST", 1)
-        //connection.get("TEST2") must equalTo(Success(Some("cake")))
+        connection.get("TEST") must equalTo(Success(None))
+        connection.select(1)
+        connection.get("TEST") must equalTo(Success(Some("cake")))
       }
     }
     "persist method" in {

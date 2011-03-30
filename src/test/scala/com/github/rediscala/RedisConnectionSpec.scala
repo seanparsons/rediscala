@@ -12,7 +12,8 @@ object RedisConnectionSpec extends SpecificationWithJUnit
                            with Mockito
                            with StringOperationsSpec
                            with ServerOperationsSpec
-                           with KeyOperationsSpec {
+                           with KeyOperationsSpec
+                           with ConnectionOperationsSpec {
   val host = "localhost"
   val port = 9786
   val redisAvailable = try {
@@ -52,6 +53,9 @@ object RedisConnectionSpec extends SpecificationWithJUnit
     }
     "must have key commands" in {
       keyOperations
+    }
+    "must have connection commands" in {
+      connectionOperations
     }
   }
 }
