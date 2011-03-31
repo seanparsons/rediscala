@@ -7,4 +7,6 @@ trait ConnectionOperations {
   def select(database: Long) = executeStatusCodeResponse(Vector("SELECT", database))
 
   def echo(message: Any) = executeStringResponse(Vector("ECHO", message))
+
+  def ping() = executeStatusCodeResponse(Vector("PING"))
 }

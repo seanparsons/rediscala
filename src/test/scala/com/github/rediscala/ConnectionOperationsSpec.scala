@@ -15,5 +15,10 @@ trait ConnectionOperationsSpec {
         connection.select(1) must equalTo(Success("OK"))
       }
     }
+    "ping method" in {
+      "returns PONG when called" in {
+        connection.ping() must equalTo(Success("PONG"))
+      }
+    }
   }
 }
